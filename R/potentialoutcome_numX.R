@@ -14,7 +14,7 @@
 #' then users should specify it as a factor variable in advance so that function \code{\link{potentialoutcome_facX}}
 #' would be called automatically instead. The function still works well if the exposure is a multi-level discrete variable.
 #'
-#' @usage potentialoutcome_numX (xx, xm, data, X, M, Y,
+#' @usage potentialoutcome_numX (xx, xm, data, X, exp0=NULL, exp1=NULL, M, Y,
 #' m_type, y_type, m_model, y_model)
 #'
 #' @param xx a counterfactual value for exposure, directly affecting the outcome. Equals 1 in the treatment group,
@@ -23,6 +23,8 @@
 #' equals 0 in the control group.
 #' @param data a dataframe used for the above models in the mediation analysis.
 #' @param X a character variable of the exposure's name.
+#' @param exp0 a numeric variable of the baseline level of the exposure.
+#' @param exp1 a numeric variable of the new level of the exposure.
 #' @param M a character variable of the mediator's name.
 #' @param Y a character variable of the outcome's name.
 #' @param m_type a character variable of the mediator's type.
@@ -34,14 +36,25 @@
 #'
 #' @export
 #'
-potentialoutcome_numX = function(xx = NULL, xm = NULL, data = NULL, X = NULL, M = NULL,
-                                 Y = NULL, m_type = NULL, y_type = NULL,
+potentialoutcome_numX = function(xx = NULL, xm = NULL, data = NULL, X = NULL, exp0 = NULL, exp1 = NULL,
+                                 M = NULL, Y = NULL, m_type = NULL, y_type = NULL,
                                  m_model = NULL, y_model = NULL)
 { #beginning main function
 
 #dealing with binary exposure X
 if (length(unique(data[[X]])) <= 2L && all(unique(data[[X]]) %in% c(0L, 1L)))
   {data[[X]][] = 0L}
+
+# Only exp0 specified
+if(!is.null(exp0) && is.null(exp1))
+  {data[[X]][] = exp0}
+
+# exp0 nad exp1 specified
+if(!is.null(exp0) && !is.null(exp1))
+{data[[X]][] = exp0
+  if(xm==1){xm = exp1-exp0}
+  if(xx==1){xx = exp1-exp0}
+}
 
 setDT(data)  # Targeting data
 # Constructing data_m (X in potential vaule M)

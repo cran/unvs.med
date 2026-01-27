@@ -4,7 +4,7 @@
 \alias{FormalEstmed}
 \title{Formal Estimation for Causal Mediation Effects (The Main Function)}
 \usage{
-FormalEstmed (med_model, out_model, data, exposure,
+FormalEstmed (med_model, out_model, data, exposure, exp0=NULL, exp1=NULL,
 mediator=NULL, outcome=NULL, med_type=NULL,out_type=NULL, cov_val=NULL,
 boot_num=100, MT = TRUE, Cf_lv=0.95)
 }
@@ -16,6 +16,10 @@ boot_num=100, MT = TRUE, Cf_lv=0.95)
 \item{data}{a dataframe used in the analysis.}
 
 \item{exposure}{a character variable of the exposure's name. Must be specified by the user.}
+
+\item{exp0}{a numeric variable of the baseline level of the exposure.}
+
+\item{exp1}{a numeric variable of the new level of the exposure.}
 
 \item{mediator}{a character variable of the mediator's name. Identified automatically if not specified by the user.}
 
@@ -119,6 +123,22 @@ out_model=lm(out~med*exp+C1+C2+C3, data=testdata) # Fitting outcome's model
 r11 = FormalEstmed (med_model=med_model, out_model=out_model,
 data=testdata, exposure = "exp") # Running formal estimation via bootstrapping
 summary(r11) # Viewing results in short form and on RD scales.
+
+########
+# the new level of the exposure at 3.5
+# r11.1 and r11.2 are identical
+r11.1 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+exposure = "exp", exp0 = 2.5)
+summary(r11.1)
+r11.2 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+exposure = "exp", exp0 = 2.5, exp1 = 3.5)
+summary(r11.2)
+
+# Setting the baseline level of the exposure at 5,
+# the new level of the exposure at 7
+r11.3 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+exposure = "exp", exp0 = 5, exp1 = 7)
+summary(r11.3)
 
 ############################################################
 # Example 1.2: Example 1.1 but considering moderated mediation

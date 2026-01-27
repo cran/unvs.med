@@ -4,7 +4,7 @@
 \alias{potentialoutcome_numX}
 \title{Estimation of Potential Outcomes Based on the Universal Approach (for Numeric Exposure)}
 \usage{
-potentialoutcome_numX (xx, xm, data, X, M, Y,
+potentialoutcome_numX (xx, xm, data, X, exp0=NULL, exp1=NULL, M, Y,
 m_type, y_type, m_model, y_model)
 }
 \arguments{
@@ -17,6 +17,10 @@ equals 0 in the control group.}
 \item{data}{a dataframe used for the above models in the mediation analysis.}
 
 \item{X}{a character variable of the exposure's name.}
+
+\item{exp0}{a numeric variable of the baseline level of the exposure.}
+
+\item{exp1}{a numeric variable of the new level of the exposure.}
 
 \item{M}{a character variable of the mediator's name.}
 

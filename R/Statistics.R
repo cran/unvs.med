@@ -14,13 +14,15 @@
 #' is not a continuous variable. The function deals with o-1 exposure, character and factor exposure and then
 #' displays the grouping information for users.
 #'
-#' @usage Statistics (m_model, y_model, data, X, M, Y,
+#' @usage Statistics (m_model, y_model, data, X, exp0=NULL, exp1=NULL, M, Y,
 #' m_type, y_type, boot_num = 100, MT = TRUE, Cf_lv = 0.95)
 #'
 #' @param m_model a fitted model object for the mediator.
 #' @param y_model a fitted model object for the outcome.
 #' @param data a dataframe used in the analysis.
 #' @param X a character variable of the exposure's name.
+#' @param exp0 a numeric variable of the baseline level of the exposure.
+#' @param exp1 a numeric variable of the new level of the exposure.
 #' @param M a character variable of the mediator's name.
 #' @param Y a character variable of the outcome's name.
 #' @param m_type a character variable of the mediator's type.
@@ -36,8 +38,8 @@
 #'
 #' @export
 #'
-Statistics = function (m_model = NULL, y_model = NULL, data = NULL, X = NULL, M = NULL, Y = NULL,
-                       m_type = NULL, y_type = NULL, boot_num = 100, MT = TRUE, Cf_lv = 0.95)
+Statistics = function (m_model = NULL, y_model = NULL, data = NULL, X = NULL, exp0 = NULL, exp1 = NULL,
+                       M = NULL, Y = NULL, m_type = NULL, y_type = NULL, boot_num = 100, MT = TRUE, Cf_lv = 0.95)
 { # beginning
 
   # Identifying factor X
@@ -64,12 +66,12 @@ Statistics = function (m_model = NULL, y_model = NULL, data = NULL, X = NULL, M 
   {message("\nMulti-threading process activated: ",parallel::detectCores() - 1," cores in use")
     suppressMessages({
     Boot_result = BootEstimation_MT(m_model = m_model, y_model = y_model, data = data,
-                                    X = X, M = M, Y = Y, m_type = m_type, y_type = y_type,
+                                    X = X, exp0=exp0, exp1=exp1, M = M, Y = Y, m_type = m_type, y_type = y_type,
                                     boot_num = boot_num)
     })
   }else{
     Boot_result = BootEstimation_for(m_model = m_model, y_model = y_model, data = data,
-                                     X = X, M = M, Y = Y, m_type = m_type, y_type = y_type,
+                                     X = X, exp0=exp0, exp1=exp1, M = M, Y = Y, m_type = m_type, y_type = y_type,
                                      boot_num = boot_num)}
 
 

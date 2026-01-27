@@ -7,12 +7,15 @@
 #'
 #' This is an internal function, automatically called by the function \code{\link{BootEstimation_for}} or \code{\link{BootEstimation_MT}}.
 #'
-#' @usage SingleEstimation (m_model, y_model, data, X, M, Y, m_type, y_type)
+#' @usage SingleEstimation (m_model, y_model, data, X, exp0=NULL, exp1=NULL,
+#' M, Y, m_type, y_type)
 #'
 #' @param m_model a fitted model object for the mediator.
 #' @param y_model a fitted model object for the outcome.
 #' @param data a dataframe used in the analysis.
 #' @param X a character variable of the exposure's name.
+#' @param exp0 a numeric variable of the baseline level of the exposure.
+#' @param exp1 a numeric variable of the new level of the exposure.
 #' @param M a character variable of the mediator's name.
 #' @param Y a character variable of the outcome's name.
 #' @param m_type a character variable of the mediator's type.
@@ -24,23 +27,28 @@
 #'
 #' @export
 #'
-SingleEstimation = function(m_model = NULL, y_model = NULL, data=NULL, X = NULL, M = NULL,
-                            Y = NULL, m_type = NULL, y_type = NULL)
+SingleEstimation = function(m_model = NULL, y_model = NULL, data=NULL,
+                            X = NULL, exp0 = NULL, exp1 = NULL,
+                            M = NULL, Y = NULL, m_type = NULL, y_type = NULL)
 {#beginning function
 
 # Calculating potential outcomes
 if(is.numeric(data[[X]])){
   # Numeric exposure
-  Y00=potentialoutcome_numX (xx = 0, xm = 0, data = data, X = X, M = M, Y = Y,
+  Y00=potentialoutcome_numX (xx = 0, xm = 0, data = data, X = X, exp0=exp0, exp1=exp1,
+                            M = M, Y = Y,
                             m_type = m_type, y_type = y_type, m_model = m_model,
                             y_model = y_model)
-  Y01=potentialoutcome_numX (xx = 0, xm = 1, data = data, X = X, M = M, Y = Y,
+  Y01=potentialoutcome_numX (xx = 0, xm = 1, data = data, X = X, exp0=exp0, exp1=exp1,
+                            M = M, Y = Y,
                             m_type = m_type, y_type = y_type, m_model = m_model,
                             y_model = y_model)
-  Y10=potentialoutcome_numX (xx = 1, xm = 0, data = data, X = X, M = M, Y = Y,
+  Y10=potentialoutcome_numX (xx = 1, xm = 0, data = data, X = X, exp0=exp0, exp1=exp1,
+                             M = M, Y = Y,
                              m_type = m_type, y_type = y_type, m_model = m_model,
                              y_model = y_model)
-  Y11=potentialoutcome_numX (xx = 1, xm = 1, data = data, X = X, M = M, Y = Y,
+  Y11=potentialoutcome_numX (xx = 1, xm = 1, data = data, X = X, exp0=exp0, exp1=exp1,
+                             M = M, Y = Y,
                              m_type = m_type, y_type = y_type, m_model = m_model,
                              y_model = y_model)
 

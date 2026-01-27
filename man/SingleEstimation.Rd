@@ -4,7 +4,8 @@
 \alias{SingleEstimation}
 \title{Single-time Estimation for Causal Mediation Effects}
 \usage{
-SingleEstimation (m_model, y_model, data, X, M, Y, m_type, y_type)
+SingleEstimation (m_model, y_model, data, X, exp0=NULL, exp1=NULL,
+M, Y, m_type, y_type)
 }
 \arguments{
 \item{m_model}{a fitted model object for the mediator.}
@@ -14,6 +15,10 @@ SingleEstimation (m_model, y_model, data, X, M, Y, m_type, y_type)
 \item{data}{a dataframe used in the analysis.}
 
 \item{X}{a character variable of the exposure's name.}
+
+\item{exp0}{a numeric variable of the baseline level of the exposure.}
+
+\item{exp1}{a numeric variable of the new level of the exposure.}
 
 \item{M}{a character variable of the mediator's name.}
 

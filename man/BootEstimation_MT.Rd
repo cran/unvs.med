@@ -5,8 +5,8 @@
 \title{Bootstrapping Estimation for Causal Mediation Effects via
 Multi-threading Process}
 \usage{
-BootEstimation_MT (m_model, y_model, data, X, M, Y,
-m_type, y_type, boot_num = 100)
+BootEstimation_MT (m_model, y_model, data, X, exp0=NULL, exp1=NULL,
+M, Y, m_type, y_type, boot_num = 100)
 }
 \arguments{
 \item{m_model}{a fitted model object for the mediator.}
@@ -16,6 +16,10 @@ m_type, y_type, boot_num = 100)
 \item{data}{a dataframe used in the analysis.}
 
 \item{X}{a character variable of the exposure's name.}
+
+\item{exp0}{a numeric variable of the baseline level of the exposure.}
+
+\item{exp1}{a numeric variable of the new level of the exposure.}
 
 \item{M}{a character variable of the mediator's name.}
 

@@ -4,7 +4,7 @@
 \alias{Statistics}
 \title{Statistics of Estimated Value of Causal Mediation Effects}
 \usage{
-Statistics (m_model, y_model, data, X, M, Y,
+Statistics (m_model, y_model, data, X, exp0=NULL, exp1=NULL, M, Y,
 m_type, y_type, boot_num = 100, MT = TRUE, Cf_lv = 0.95)
 }
 \arguments{
@@ -15,6 +15,10 @@ m_type, y_type, boot_num = 100, MT = TRUE, Cf_lv = 0.95)
 \item{data}{a dataframe used in the analysis.}
 
 \item{X}{a character variable of the exposure's name.}
+
+\item{exp0}{a numeric variable of the baseline level of the exposure.}
+
+\item{exp1}{a numeric variable of the new level of the exposure.}
 
 \item{M}{a character variable of the mediator's name.}
 

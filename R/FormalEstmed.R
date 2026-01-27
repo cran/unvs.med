@@ -19,7 +19,7 @@
 #' to several minutes. Therefore, we welcome users to provide a more efficient algorithm for the case of continuous mediators and
 #' contact our maintainer with no hesitation. We are looking forward to your suggestions and comments.
 #'
-#' @usage FormalEstmed (med_model, out_model, data, exposure,
+#' @usage FormalEstmed (med_model, out_model, data, exposure, exp0=NULL, exp1=NULL,
 #' mediator=NULL, outcome=NULL, med_type=NULL,out_type=NULL, cov_val=NULL,
 #' boot_num=100, MT = TRUE, Cf_lv=0.95)
 #'
@@ -27,6 +27,8 @@
 #' @param out_model a fitted model object for the outcome.
 #' @param data a dataframe used in the analysis.
 #' @param exposure a character variable of the exposure's name. Must be specified by the user.
+#' @param exp0 a numeric variable of the baseline level of the exposure.
+#' @param exp1 a numeric variable of the new level of the exposure.
 #' @param mediator a character variable of the mediator's name. Identified automatically if not specified by the user.
 #' @param outcome a character variable of the outcome's name. Identified automatically if not specified by the user.
 #' @param med_type a character variable of the mediator's type. Identified automatically if not specified by the user.
@@ -104,6 +106,23 @@
 #' r11 = FormalEstmed (med_model=med_model, out_model=out_model,
 #' data=testdata, exposure = "exp") # Running formal estimation via bootstrapping
 #' summary(r11) # Viewing results in short form and on RD scales.
+#'
+#' ########
+#  # Setting the baseline level of the exposure at 2.5,
+#' # the new level of the exposure at 3.5
+#' # r11.1 and r11.2 are identical
+#' r11.1 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+#' exposure = "exp", exp0 = 2.5)
+#' summary(r11.1)
+#' r11.2 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+#' exposure = "exp", exp0 = 2.5, exp1 = 3.5)
+#' summary(r11.2)
+#'
+#' # Setting the baseline level of the exposure at 5,
+#' # the new level of the exposure at 7
+#' r11.3 = FormalEstmed (med_model=med_model, out_model=out_model, data=testdata,
+#' exposure = "exp", exp0 = 5, exp1 = 7)
+#' summary(r11.3)
 #'
 #' ############################################################
 #' # Example 1.2: Example 1.1 but considering moderated mediation
@@ -191,7 +210,8 @@
 #' @import utils
 #'
 FormalEstmed = function(med_model=NULL, out_model=NULL, data=NULL,
-                      exposure=NULL, mediator=NULL, outcome=NULL,
+                      exposure=NULL, exp0=NULL, exp1=NULL,
+                      mediator=NULL, outcome=NULL,
                       med_type=NULL,out_type=NULL, cov_val=NULL,
                       boot_num=100, MT = TRUE, Cf_lv=0.95)
 { #beginning main function
@@ -208,6 +228,16 @@ m_model=med_model
 y_model=out_model
 
 confirmingX(X = X) # confirming exposure X
+
+# Dealing with two set levels of the exposure
+if (!is.null(exp0) &&!is.numeric(exp0))
+{stop("exp0 should be numeric variables")}
+
+if (!is.null(exp1) &&!is.numeric(exp1))
+{stop("exp1 should be numeric variables")}
+
+if (!is.null(exp1) && is.null(exp0))
+{stop("exp0 should not be empty")}
 
 # identifying mediator M, outcome Y, covariates (confounders/control variables) W
 if(is.null(M))
@@ -247,7 +277,8 @@ message("Function being preceeded! It may take a while...")
 message("(Please make sure all the settings are consistent with the instruction)")
 
 # Obtaining results
-Com_Est_result = Statistics (data = data, X = X, M = M, Y = Y, m_type = m_type, y_type = y_type,
+Com_Est_result = Statistics (data = data, X = X, exp0=exp0, exp1=exp1,
+                             M = M, Y = Y, m_type = m_type, y_type = y_type,
                             m_model = m_model, y_model = y_model, boot_num=boot_num, MT = MT,
                             Cf_lv=Cf_lv) # Results for mediation effects
 

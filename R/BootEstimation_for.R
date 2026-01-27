@@ -13,13 +13,15 @@
 #' For small amounts of data, e.g., dozens to a hundred samples, with relatively simple models,
 #' \code{for} loop is recommended.
 #'
-#' @usage BootEstimation_for (m_model, y_model, data, X, M, Y,
-#' m_type, y_type, boot_num = 100)
+#' @usage BootEstimation_for (m_model, y_model, data, X, exp0=NULL, exp1=NULL,
+#' M, Y, m_type, y_type, boot_num = 100)
 #'
 #' @param m_model a fitted model object for the mediator.
 #' @param y_model a fitted model object for the outcome.
 #' @param data a dataframe used in the analysis.
 #' @param X a character variable of the exposure's name.
+#' @param exp0 a numeric variable of the baseline level of the exposure.
+#' @param exp1 a numeric variable of the new level of the exposure.
 #' @param M a character variable of the mediator's name.
 #' @param Y a character variable of the outcome's name.
 #' @param m_type a character variable of the mediator's type.
@@ -33,7 +35,8 @@
 #' @export
 #'
 BootEstimation_for = function(m_model = NULL, y_model = NULL, data = NULL,
-                              X = NULL, M = NULL, Y = NULL, m_type = NULL,
+                              X = NULL, exp0 = NULL, exp1 = NULL,
+                              M = NULL, Y = NULL, m_type = NULL,
                               y_type = NULL, boot_num = 100)
 {#beginning function
     # Preparing to save bootstrap result
