@@ -65,13 +65,15 @@ data_m[, (X) := xm]
 
   # Predicting the distribution of M
   model_sigma = sigma(m_model) # Model's standard error
-  mu_m=predict(m_model, newdata=data_m, type = "response")
+  pred_m = predict(m_model, newdata=data_m, type = "response",se.fit = T)
+  mu_m = pred_m$fit
+  se_m = pred_m$se.fit
 
   # Producing distribution M through Monte Carlo simulation
   MC = 100L  # Number of draw in Monte Carlo simulation
   n = as.integer(nrow(data))
 
-  m_samples = matrix(rnorm(n * MC, mean = mu_m, sd = model_sigma),
+  m_samples = matrix(rnorm(n * MC, mean = mu_m, sd = se_m),
                      ncol = MC)
 
   # Constructing data_y (X in potential value Y)

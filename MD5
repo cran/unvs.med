@@ -1,6 +1,6 @@
-811755631fd454c62d83e8718af8a40e *DESCRIPTION
+b8cc3e37116692869cb5c0d82cf569b9 *DESCRIPTION
 838569865a77cce575d306b4b5a78b9b *NAMESPACE
-36218d230ffb5864450e8efbbbefa449 *NEWS.md
+bec4cac91e36bf92027526e990db0bbe *NEWS.md
 8a5653dcba24791aec41b007a34aeaba *R/BootEstimation_MT.R
 8e43b5d2bcc691f323f22c0070e73aa1 *R/BootEstimation_for.R
 b0bedfae2ba1c334cbb7db3a3f28c369 *R/FormalEstmed.R
@@ -12,8 +12,8 @@ ad3cbd20f17933ecc169adbec373607a *R/cond_cov.R
 405122fd31f60dd6c1f2ee663b545f74 *R/ident_M_type.R
 94ba7266dffbd0f306c14f6684981bb7 *R/ident_Y_type.R
 5c19160fbe9ac1341d91709f7309310b *R/plot.unvs.med.R
-e1590baaf2b3404395e5ae2a5dd5fe27 *R/potentialoutcome_facX.R
-988198dd4150e873b1fd08603dc40488 *R/potentialoutcome_numX.R
+b6cc3b84667b60bd6573efbb3739454f *R/potentialoutcome_facX.R
+e3c700bc66f31255f1b1e0f4c040f803 *R/potentialoutcome_numX.R
 fad4bd332ff20c79c7b68707174aa3c5 *R/summary.unvs.med.R
 31ccc73c0b89db36f40bf663eff80edf *R/um.test1.R
 3932bd275221d6f899149f2eb027aa2d *R/um.test2.R
