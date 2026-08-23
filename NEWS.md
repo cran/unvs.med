@@ -1,5 +1,8 @@
+# unvs.med 1.1.2
+Some minor bugs fixed.
+
 # unvs.med 1.1.1
-Some monor bugs fixed.
+Some minor bugs fixed.
 
 # unvs.med 1.1.0
 New version released.

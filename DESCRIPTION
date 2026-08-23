@@ -1,11 +1,10 @@
 Package: unvs.med
 Title: A Universal Approach for Causal Mediation Analysis
-Version: 1.1.1
-Date: 2026-06-30
+Version: 1.1.2
+Date: 2026-08-23
 Authors@R: c(person(given = "Tianbao", family = "Zhou", role = c("aut", "cre"),
                     email = "michaelzhou@buaa.edu.cn"),
-             person("Xinghao", "Li", role="aut", email="lixinghao@bjfu.edu.cn"),
-             person("Lin", "Liu*", role="aut", email="liulin@pku.edu.cn"))
+             person("Xinghao", "Li", role="aut", email="lixinghao@bjfu.edu.cn"))
 Description: 
     This program realizes a universal estimation approach that accommodates
     multi-category variables and effect scales, making up for the deficiencies
@@ -27,9 +26,8 @@ Repository: CRAN
 Config/build/clean-install: true
 Config/check/use_internal_timestamps: true
 Config/roxygen2/version: 8.0.0
-Packaged: 2026-06-30 17:15:38 UTC; 21250
+Packaged: 2026-08-23 06:13:03 UTC; 21250
 Author: Tianbao Zhou [aut, cre],
-  Xinghao Li [aut],
-  Lin Liu* [aut]
+  Xinghao Li [aut]
 Maintainer: Tianbao Zhou <michaelzhou@buaa.edu.cn>
-Date/Publication: 2026-06-30 22:00:03 UTC
+Date/Publication: 2026-08-23 06:30:02 UTC
