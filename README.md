@@ -1,6 +1,6 @@
 # Package "unvs.med"
 
-Version: 1.0.0
+Version: 1.2.0
 
 <!-- badges: start -->
 
@@ -13,8 +13,6 @@ Copyrights reserved by:
 First author (creator): Zhou Tianbao (Michael Zhou) [michaelzhou\@buaa.edu.cn](mailto:michaelzhou@buaa.edu.cn){.email}, \<ORCID: 0000-0001-6782-626X\>;
 
 Second author (advisor): Li Xinghao [lixinghao\@bjfu.edu.cn](mailto:lixinghao@bjfu.edu.cn){.email};
-
-Corresponding author (supervisor): Liu Lin\*, [liulin\@pku.edu.cn](mailto:liulin@pku.edu.cn){.email}
 
 Institution: School of Government, Peking University, Beijing, China.
 
@@ -52,4 +50,7 @@ summary(r11)
 
 ## Plot of PNED and TNDE on RD scales
 plot(r11)
-```
+
+## Demodata1 and Demodata2 are also used for data simulation
+data(Demodata1)
+data(Demodata2)

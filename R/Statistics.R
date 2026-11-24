@@ -79,44 +79,74 @@ Statistics = function (m_model = NULL, y_model = NULL, data = NULL, X = NULL, ex
   row_names = c("Estimate", "Std.Err.", "z-stat", "p-value", "LowerCI", "UpperCI") # Statistics name
   alpha=1-Cf_lv # confidence level
 
-  # Final results on risk difference (RD) scale
-  Stat.RD=data.frame(TE=numeric(), PNDE=numeric(), TNDE=numeric(), PNIE=numeric(),
-                            TNIE=numeric(), Prop_PNIE=numeric(), Prop_TNIE=numeric(),
-                            Ave_NDE=numeric(), Ave_NIE=numeric(), Ave_Prop_NIE=numeric()
-                     )
-  Stat.RD[1,] = colMeans(Boot_result$RD, na.rm = T) # mean
-  Stat.RD[2,] = apply(Boot_result$RD, 2, sd, na.rm = T) # standard error
-  Stat.RD[3,] = Stat.RD[1,] / Stat.RD[2,] # z-statistics
-  Stat.RD[4,] = 2 * (1 - pnorm(abs(as.numeric(Stat.RD[3,])))) # p-value
-  Stat.RD[5,] = apply(Boot_result$RD, 2, quantile, probs = alpha/2, na.rm = T) #LCI
-  Stat.RD[6,] = apply(Boot_result$RD, 2, quantile, probs = 1-alpha/2, na.rm = T) # UCI
-  row.names(Stat.RD) = row_names # row names
-
-  # Final results on odds ratio (OR) scale
-  Stat.OR=data.frame(TE=numeric(), PNDE=numeric(), TNDE=numeric(), PNIE=numeric(),
-                     TNIE=numeric(), Prop_PNIE=numeric(), Prop_TNIE=numeric(),
-                     Ave_NDE=numeric(), Ave_NIE=numeric(), Ave_Prop_NIE=numeric()
+  # ============================================================
+  # Point estimate on the original sample (computed once)
+  # ============================================================
+  Origin_result <- SingleEstimation(
+    m_model = m_model, y_model = y_model, data = data,
+    X = X, exp0 = exp0, exp1 = exp1, M = M, Y = Y,
+    m_type = m_type, y_type = y_type
   )
-  Stat.OR[1,] = colMeans(Boot_result$OR, na.rm = T)
-  Stat.OR[2,] = apply(Boot_result$OR, 2, sd, na.rm = T)
-  Stat.OR[3,] = Stat.OR[1,] / Stat.OR[2,]
-  Stat.OR[4,] = 2 * (1 - pnorm(abs(as.numeric(Stat.OR[3,]))))
-  Stat.OR[5,] = apply(Boot_result$OR, 2, quantile, probs = alpha/2, na.rm = T)
-  Stat.OR[6,] = apply(Boot_result$OR, 2, quantile, probs = 1-alpha/2, na.rm = T)
-  row.names(Stat.OR) = row_names
 
-  # Final results on risk ratio (RR) scale
-  Stat.RR=data.frame(TE=numeric(), PNDE=numeric(), TNDE=numeric(), PNIE=numeric(),
-                     TNIE=numeric(), Prop_PNIE=numeric(), Prop_TNIE=numeric(),
-                     Ave_NDE=numeric(), Ave_NIE=numeric(), Ave_Prop_NIE=numeric()
+  row_names <- c("Estimate", "Std.Err.", "z-stat", "p-value", "LowerCI", "UpperCI")
+  alpha <- 1 - Cf_lv
+
+  # ------------------------------------------------------------
+  # Risk difference (RD) scale
+  # ------------------------------------------------------------
+  Stat.RD <- data.frame(
+    TE = numeric(), PNDE = numeric(), TNDE = numeric(), PNIE = numeric(),
+    TNIE = numeric(), Prop_PNIE = numeric(), Prop_TNIE = numeric(),
+    Ave_NDE = numeric(), Ave_NIE = numeric(), Ave_Prop_NIE = numeric()
   )
-  Stat.RR[1,] = colMeans(Boot_result$RR, na.rm = T)
-  Stat.RR[2,] = apply(Boot_result$RR, 2, sd, na.rm = T)
-  Stat.RR[3,] = Stat.RR[1,] / Stat.RR[2,]
-  Stat.RR[4,] = 2 * (1 - pnorm(abs(as.numeric(Stat.RR[3,]))))
-  Stat.RR[5,] = apply(Boot_result$RR, 2, quantile, probs = alpha/2, na.rm = T)
-  Stat.RR[6,] = apply(Boot_result$RR, 2, quantile, probs = 1-alpha/2, na.rm = T)
-  row.names(Stat.RR) = row_names
+
+  Stat.RD[1, ] <- as.numeric(Origin_result$RD)                  # original-sample estimate
+  Stat.RD[2, ] <- apply(Boot_result$RD, 2, sd, na.rm = TRUE)    # bootstrap SE
+  Stat.RD[3, ] <- Stat.RD[1, ] / Stat.RD[2, ]                   # z-statistic
+  Stat.RD[4, ] <- 2 * (1 - pnorm(abs(as.numeric(Stat.RD[3, ]))))# two-sided p-value
+  Stat.RD[5, ] <- apply(Boot_result$RD, 2, quantile,
+                        probs = alpha / 2, na.rm = TRUE)        # lower CI
+  Stat.RD[6, ] <- apply(Boot_result$RD, 2, quantile,
+                        probs = 1 - alpha / 2, na.rm = TRUE)    # upper CI
+  row.names(Stat.RD) <- row_names
+
+  # ------------------------------------------------------------
+  # Odds ratio (OR) scale
+  # ------------------------------------------------------------
+  Stat.OR <- data.frame(
+    TE = numeric(), PNDE = numeric(), TNDE = numeric(), PNIE = numeric(),
+    TNIE = numeric(), Prop_PNIE = numeric(), Prop_TNIE = numeric(),
+    Ave_NDE = numeric(), Ave_NIE = numeric(), Ave_Prop_NIE = numeric()
+  )
+
+  Stat.OR[1, ] <- as.numeric(Origin_result$OR)                  # original-sample estimate
+  Stat.OR[2, ] <- apply(Boot_result$OR, 2, sd, na.rm = TRUE)    # bootstrap SE
+  Stat.OR[3, ] <- Stat.OR[1, ] / Stat.OR[2, ]                   # z-statistic
+  Stat.OR[4, ] <- 2 * (1 - pnorm(abs(as.numeric(Stat.OR[3, ]))))# two-sided p-value
+  Stat.OR[5, ] <- apply(Boot_result$OR, 2, quantile,
+                        probs = alpha / 2, na.rm = TRUE)        # lower CI
+  Stat.OR[6, ] <- apply(Boot_result$OR, 2, quantile,
+                        probs = 1 - alpha / 2, na.rm = TRUE)    # upper CI
+  row.names(Stat.OR) <- row_names
+
+  # ------------------------------------------------------------
+  # Risk ratio (RR) scale
+  # ------------------------------------------------------------
+  Stat.RR <- data.frame(
+    TE = numeric(), PNDE = numeric(), TNDE = numeric(), PNIE = numeric(),
+    TNIE = numeric(), Prop_PNIE = numeric(), Prop_TNIE = numeric(),
+    Ave_NDE = numeric(), Ave_NIE = numeric(), Ave_Prop_NIE = numeric()
+  )
+
+  Stat.RR[1, ] <- as.numeric(Origin_result$RR)                  # original-sample estimate
+  Stat.RR[2, ] <- apply(Boot_result$RR, 2, sd, na.rm = TRUE)    # bootstrap SE
+  Stat.RR[3, ] <- Stat.RR[1, ] / Stat.RR[2, ]                   # z-statistic
+  Stat.RR[4, ] <- 2 * (1 - pnorm(abs(as.numeric(Stat.RR[3, ]))))# two-sided p-value
+  Stat.RR[5, ] <- apply(Boot_result$RR, 2, quantile,
+                        probs = alpha / 2, na.rm = TRUE)        # lower CI
+  Stat.RR[6, ] <- apply(Boot_result$RR, 2, quantile,
+                        probs = 1 - alpha / 2, na.rm = TRUE)    # upper CI
+  row.names(Stat.RR) <- row_names
 
 return(list(Stat.RD=Stat.RD, Stat.OR=Stat.OR, Stat.RR=Stat.RR, Boot_result=Boot_result))
 } # ending

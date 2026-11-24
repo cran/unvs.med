@@ -165,7 +165,7 @@
 #' testdata$out2=as.factor(testdata$out2) # out2 is the outcome. Convert it into a factor.
 #' out_model=polr(out2~med*exp+C1+C2+C3, data=testdata, method="logistic") # Fitting outcome's model.
 #' r22 = FormalEstmed (med_model=med_model, out_model=out_model,
-#' data=testdata, exposure = "exp", boot=100, cov_val="C2>=50") # Solely conditioning on C2
+#' data=testdata, exposure = "exp", boot_num=100, cov_val="C2>=50") # Solely conditioning on C2
 #' summary(r22)
 #'
 #' ############################################################
@@ -245,20 +245,29 @@ if(is.null(M))
 if(is.null(Y))
 {Y=deparse(formula(y_model)[[2]])}
 
-Wy=setdiff(all.vars(formula(y_model)),c(Y,X,M))
-Wm=setdiff(all.vars(formula(m_model)),c(X,M))
-W=union(Wy,Wm)
+model_vars <- function(model) {
+  vars <- all.vars(formula(model))
+  cl <- model$call
+  for (arg in c('weights', 'subset', 'offset')) {
+    if (!is.null(cl[[arg]])) vars <- union(vars, all.vars(cl[[arg]]))
+  }
+  vars
+}
+
+W <- union(model_vars(m_model), model_vars(y_model))
+W <- setdiff(W, c(X, M, Y))
+
+# Modifying dataset
+data <- as.data.frame(data)
+data <- data[, intersect(c(X, M, Y, W), names(data)), drop = FALSE]
+data = na.omit(data) #Excluding NA lines
 
 # identifying mediator type
 if(is.null(m_type))
-{m_type=ident_M_type(M = M, data = data)}
+{m_type=ident_M_type(M = M, data = data, model = m_model)}
 # identifying outcome type
 if(is.null(y_type))
-{y_type=ident_Y_type(Y = Y, data = data)}
-
-# Modifying dataset
-data = data[, intersect(c(X, M, Y, W), names(data)), drop = FALSE] # Excluding irrevalent variables
-data = na.omit(data) #Excluding NA lines
+{y_type=ident_Y_type(Y = Y, data = data, model = y_model)}
 
 # Dealing with conditional covariates
 if(!is.null(cov_val))
@@ -273,7 +282,7 @@ if(!is.null(cov_val))
 }
 
 # Main estimations begin
-message("Function being preceeded! It may take a while...")
+message("Function being proceeded! It may take a while...")
 message("(Please make sure all the settings are consistent with the instruction)")
 
 # Obtaining results

@@ -22,3 +22,43 @@
 #' head(testdata)
 #' summary(testdata)
 "testdata"
+
+#' A simulated dataset used in examples and vignettes to demonstrate the functionality
+#' of the \code{FormalEstmed} function. Contains variables for exposure (\code{X}),
+#' mediator (\code{M}), outcome (\code{Y}), and covariates (\code{C1}, \code{C2}, \code{C3}).
+#'
+#' @format Demodata1
+#' \describe{
+#'   \item{X}{Exposure variable (continuous).}
+#'   \item{M}{Mediator variable (continuous).}
+#'   \item{Y}{Outcome variable (binary).}
+#'   \item{C1}{Covariate 1 (binary).}
+#'   \item{C2}{Covariate 2 (continuous).}
+#'   \item{C3}{Covariate 3 (continuous).}
+#' }
+#' @source Simulated data for package demonstration.
+#' @examples
+#' data(Demodata1)
+#' head(Demodata1)
+#' summary(Demodata1)
+"Demodata1"
+
+#' A simulated dataset used in examples and vignettes to demonstrate the functionality
+#' of the \code{FormalEstmed} function. Contains variables for exposure (\code{X}),
+#' mediator (\code{M}), outcome (\code{Y}), and covariates (\code{C1}, \code{C2}, \code{C3}).
+#'
+#' @format Demodata2
+#' \describe{
+#'   \item{X}{Exposure variable (continuous).}
+#'   \item{M}{Mediator variable (continuous).}
+#'   \item{Y}{Outcome variable (binary).}
+#'   \item{C1}{Covariate 1 (binary).}
+#'   \item{C2}{Covariate 2 (continuous).}
+#'   \item{C3}{Covariate 3 (continuous).}
+#' }
+#' @source Simulated data for package demonstration.
+#' @examples
+#' data(Demodata2)
+#' head(Demodata2)
+#' summary(Demodata2)
+"Demodata2"

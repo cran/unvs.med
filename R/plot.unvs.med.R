@@ -51,27 +51,20 @@ plot.unvs.med = function (x = NULL, scale = "RD", type = c("PNDE", "TNIE"), ...)
 op = par(no.readonly = TRUE)
 on.exit(par(op))
 
+if (length(scale) == 1L && toupper(scale) == 'ALL') scale <- c('RD', 'OR', 'RR')
+scale <- toupper(scale)
+if (any(!scale %in% c('RD', 'OR', 'RR'))) stop('scale must be RD, OR, RR, or all.')
+
 par(mfrow = c(1,length(scale)))
 
 if(all(type == "all") || all(type == "All") || all(type == "ALL"))
 {type = colnames(x$Boot_result$RD)}
 
 for (var in scale){
-  boxplot(subset(x$Boot_result[[var]],select = type),
+  boxplot(subset(x$Boot_result[[var]], select = type),
           main = paste("Mediation effects on", var, "scales"),
           xlab = "Effect type",
-          ylab = "Estimated value",
-          boxwex = 0.1,
-          col ="white",
-          whiskcol = "gray",
-          medcol = "gray",
-          lwd = 0.25
-  )
-  points(
-    x = 1:length(type),
-    y = colMeans(subset(x$Boot_result[[var]],select = type)),
-    pch = 16,
-    col ="blue",
-    cex = 0.6,
-  )}
+          ylab = "Estimated value"
+          )
+}
 } # ending summary function

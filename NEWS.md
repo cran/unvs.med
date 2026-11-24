@@ -1,3 +1,9 @@
+# unvs.med 1.2.0
+Major improvement on code algorithm.
+New demo dataset added.
+Improvements on output messages and format.
+Some mistakes and mis-specifications have been corrected.
+
 # unvs.med 1.1.2
 Some minor bugs fixed.
 

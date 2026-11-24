@@ -4,12 +4,14 @@
 \alias{ident_Y_type}
 \title{Identification of Outcome's type}
 \usage{
-ident_Y_type (Y, data)
+ident_Y_type(Y = NULL, data = NULL, model = NULL)
 }
 \arguments{
 \item{Y}{a character variable of the outcome's name.}
 
 \item{data}{a dataframe used in the analysis.}
+
+\item{model}{an optional fitted model object. If supplied, the type is identified from the model class first: polr/clm/clmm are treated as ordinal, and a binomial glm is treated as non-ordinal.}
 }
 \value{
 This function returns a character as the outcome's type.

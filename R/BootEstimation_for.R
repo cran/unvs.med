@@ -61,8 +61,9 @@ BootEstimation_for = function(m_model = NULL, y_model = NULL, data = NULL,
       y_model_new = update(y_model, data = data_boot)
 
       # Run single estimation
-      Single_result = SingleEstimation (data=data_boot, X = X, M = M, Y = Y, m_type = m_type,
-                        y_type = y_type, m_model = m_model_new, y_model = y_model_new)
+      Single_result = SingleEstimation (data=data_boot, X = X, exp0 = exp0, exp1 = exp1,
+                                        M = M, Y = Y, m_type = m_type, y_type = y_type,
+                                        m_model = m_model_new, y_model = y_model_new)
 
       # Saving results for every single time
       Boot_result.RD[BT,]=Single_result$RD

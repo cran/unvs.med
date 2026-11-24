@@ -88,17 +88,22 @@ if(is.numeric(data[[X]])){
     Ave_Prop_NIE=Ave_Prop_NIE.RD
   )
 
+log_ratio <- function(num, den) {
+    ln <- log(num); ld <- log(den)
+    ifelse(is.finite(ln) & is.finite(ld) & ld != 0, ln / ld, NA_real_)
+  }
+
 # mediation effects on odds ratio (OR) scales
   TE.OR=(Y11/(1-Y11)) / (Y00/(1-Y00))
   PNDE.OR=(Y10/(1-Y10)) / (Y00/(1-Y00))
   TNDE.OR=(Y11/(1-Y11)) / (Y01/(1-Y01))
   PNIE.OR=(Y01/(1-Y01)) / (Y00/(1-Y00))
   TNIE.OR=(Y11/(1-Y11)) / (Y10/(1-Y10))
-  Prop_PNIE.OR=PNIE.OR/TE.OR
-  Prop_TNIE.OR=TNIE.OR/TE.OR
-  Ave_NDE.OR=(PNDE.OR+TNDE.OR)/2
-  Ave_NIE.OR=(PNIE.OR+TNIE.OR)/2
-  Ave_Prop_NIE.OR=Ave_NIE.OR/TE.OR
+  Prop_PNIE.OR <- log_ratio(PNIE.OR, TE.OR)
+  Prop_TNIE.OR <- log_ratio(TNIE.OR, TE.OR)
+  Ave_NDE.OR <- exp((log(PNDE.OR) + log(TNDE.OR)) / 2)
+  Ave_NIE.OR <- exp((log(PNIE.OR) + log(TNIE.OR)) / 2)
+  Ave_Prop_NIE.OR <- log_ratio(Ave_NIE.OR, TE.OR)
 
   # Saving result on odds ratio (OR) scale
   Single_result.OR=data.frame(
@@ -113,11 +118,11 @@ if(is.numeric(data[[X]])){
   TNDE.RR= Y11/Y01
   PNIE.RR= Y01/Y00
   TNIE.RR= Y11/Y10
-  Prop_PNIE.RR=PNIE.RR/TE.RR
-  Prop_TNIE.RR=TNIE.RR/TE.RR
-  Ave_NDE.RR=(PNDE.RR+TNDE.RR)/2
-  Ave_NIE.RR=(PNIE.RR+TNIE.RR)/2
-  Ave_Prop_NIE.RR=Ave_NIE.RR/TE.RR
+  Prop_PNIE.RR <- log_ratio(PNIE.RR, TE.RR)
+  Prop_TNIE.RR <- log_ratio(TNIE.RR, TE.RR)
+  Ave_NDE.RR <- exp((log(PNDE.RR) + log(TNDE.RR)) / 2)
+  Ave_NIE.RR <- exp((log(PNIE.RR) + log(TNIE.RR)) / 2)
+  Ave_Prop_NIE.RR <- log_ratio(Ave_NIE.RR, TE.RR)
 
   # Saving result on risk ratio (RR) scale
   Single_result.RR=data.frame(

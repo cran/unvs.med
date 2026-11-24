@@ -26,30 +26,30 @@ cond_cov = function(m_model = NULL, y_model = NULL, data = NULL, X = NULL, M = N
                     cov_val = NULL)
 { #Beginning function
   # Conditional data
-  condition = paste(cov_val, collapse = " & ")
-  data = subset(data, eval(parse(text = condition)))
+  condition <- paste(cov_val, collapse = ' & ')
+  data <- subset(data, eval(parse(text = condition), envir = data))
+  if (nrow(data) == 0L) stop('No observations satisfy cov_val.')
 
-  # Extracting covariates names
-  eq_conditions = grep("==", cov_val, value = TRUE)
-  cond_cov_names = sub("==.*", "", eq_conditions)
+  eq_conditions <- grep('==', cov_val, value = TRUE)
+  cond_vars <- trimws(sub('==.*', '', eq_conditions))
 
-  # Updating mediator model
-  new_rhs_m <- deparse(formula(m_model)[[3]])
-  for (var in cond_cov_names) {
-    new_rhs_m <- gsub(paste0("\\s?\\+?\\s?", var, "\\s?\\+?\\s?"), "+", new_rhs_m)
+  drop_terms_by_name <- function(fml, vars) {
+    tt <- terms(fml)
+    tl <- attr(tt, 'term.labels')
+    hit <- vapply(tl, function(term) {
+      any(all.vars(as.formula(paste('~', term))) %in% vars)
+    }, logical(1))
+    if (all(hit)) {
+      reformulate('1', response = deparse(formula(fml)[[2]]))
+    } else {
+      formula(drop.terms(tt, which(hit), keep.response = TRUE))
+    }
   }
-  new_rhs_m <- gsub("\\*(?=\\+)|\\+(?=\\*)", "", new_rhs_m, perl = TRUE)
-  new_formula_m <- reformulate(new_rhs_m, response = formula(m_model)[[2]])
-  m_model2 = update(m_model, formula = new_formula_m, data = data)
 
-  # Updating outcome model
-  new_rhs_y<- deparse(formula(y_model)[[3]])
-  for (var in cond_cov_names) {
-    new_rhs_y <- gsub(paste0("\\s?\\+?\\s?", var, "\\s?\\+?\\s?"), "+", new_rhs_y)
-  }
-  new_rhs_y <- gsub("\\*(?=\\+)|\\+(?=\\*)", "", new_rhs_y, perl = TRUE)
-  new_formula_y <- reformulate(new_rhs_y, response = formula(y_model)[[2]])
-  y_model2 = update(y_model, formula = new_formula_y, data = data)
+  m_model2 <- update(m_model,
+                     formula = drop_terms_by_name(formula(m_model), cond_vars), data = data)
+  y_model2 <- update(y_model,
+                     formula = drop_terms_by_name(formula(y_model), cond_vars), data = data)
 
   # Returning results
   return(list(data=data, m_model=m_model2, y_model=y_model2))

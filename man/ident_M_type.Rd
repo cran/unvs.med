@@ -4,12 +4,14 @@
 \alias{ident_M_type}
 \title{Identification of Mediator's type}
 \usage{
-ident_M_type (M, data)
+ident_M_type(M = NULL, data = NULL, model = NULL)
 }
 \arguments{
 \item{M}{a character variable of the mediator's name.}
 
 \item{data}{a dataframe used in the analysis.}
+
+\item{model}{an optional fitted model object. If supplied, the type is identified from the model class first: polr/clm/clmm are treated as ordinal, and a binomial glm is treated as binary.}
 }
 \value{
 This function returns a character as the mediator's type.

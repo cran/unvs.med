@@ -181,7 +181,7 @@ med_model=glm(med~exp+C1+C2+C3, data=testdata, family=binomial) # Fitting mediat
 testdata$out2=as.factor(testdata$out2) # out2 is the outcome. Convert it into a factor.
 out_model=polr(out2~med*exp+C1+C2+C3, data=testdata, method="logistic") # Fitting outcome's model.
 r22 = FormalEstmed (med_model=med_model, out_model=out_model,
-data=testdata, exposure = "exp", boot=100, cov_val="C2>=50") # Solely conditioning on C2
+data=testdata, exposure = "exp", boot_num=100, cov_val="C2>=50") # Solely conditioning on C2
 summary(r22)
 
 ############################################################

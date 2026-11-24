@@ -1,7 +1,7 @@
 Package: unvs.med
 Title: A Universal Approach for Causal Mediation Analysis
-Version: 1.1.2
-Date: 2026-08-23
+Version: 1.2.0
+Date: 2026-11-24
 Authors@R: c(person(given = "Tianbao", family = "Zhou", role = c("aut", "cre"),
                     email = "michaelzhou@buaa.edu.cn"),
              person("Xinghao", "Li", role="aut", email="lixinghao@bjfu.edu.cn"))
@@ -26,8 +26,8 @@ Repository: CRAN
 Config/build/clean-install: true
 Config/check/use_internal_timestamps: true
 Config/roxygen2/version: 8.0.0
-Packaged: 2026-08-23 06:13:03 UTC; 21250
+Packaged: 2026-11-24 15:00:37 UTC; 21250
 Author: Tianbao Zhou [aut, cre],
   Xinghao Li [aut]
 Maintainer: Tianbao Zhou <michaelzhou@buaa.edu.cn>
-Date/Publication: 2026-08-23 06:30:02 UTC
+Date/Publication: 2026-11-24 15:20:02 UTC

@@ -56,8 +56,16 @@ if(nld>2)
 
 setDT(data)  # Targeting data
 # Constructing data_m (X in potential vaule M)
-data_m = data[, .SD, .SDcols = setdiff(names(data), X)]
+data_m = data[, .SD, .SDcols = setdiff(names(data), c(X, M, Y))]
 data_m[, (X) := xm]
+
+#For ordinal model detecting
+predict_probs <- function(model, newdata) {
+  type <- if (inherits(model, c('clm', 'clmm'))) 'prob' else 'probs'
+  p <- predict(model, newdata = newdata, type = type)
+  if (is.list(p) && !is.null(p$fit)) p <- p$fit
+  p
+}
 
 ###### Continuous mediator ############################################################
   if(m_type == "continuous")
@@ -67,24 +75,22 @@ data_m[, (X) := xm]
   model_sigma = sigma(m_model) # Model's standard error
   pred_m = predict(m_model, newdata=data_m, type = "response",se.fit = T)
   mu_m = pred_m$fit
-  se_m = pred_m$se.fit
 
   # Producing distribution M through Monte Carlo simulation
   MC = 100L  # Number of draw in Monte Carlo simulation
   n = as.integer(nrow(data))
 
-  m_samples = matrix(rnorm(n * MC, mean = mu_m, sd = se_m),
-                     ncol = MC)
+  m_samples = matrix(rnorm(n * MC, mean = mu_m, sd = model_sigma), ncol = MC)
 
   # Constructing data_y (X in potential value Y)
-  data_y = data[rep(1:.N, each = MC), !c(X, M), with = FALSE]
+  data_y = data[rep(1:.N, each = MC), !c(X, M, Y), with = FALSE]
   data_y[, (X) := rep(xx, each = n*MC)]
   data_y[, (M) := as.vector(t(m_samples))]
 
   # Predicting Y through matrix calculations
   if (y_type == "ordinal") {
-    y_levels = as.numeric(levels(factor(data[[Y]])))
-    mu_y = predict(y_model, newdata = data_y, type = "probs")
+    y_levels = seq_along(levels(factor(data[[Y]])))
+    mu_y <- predict_probs(y_model, data_y)
     ey_matrix = matrix(tcrossprod(mu_y, matrix(y_levels, nrow = 1)), ncol = MC, nrow = n, byrow = T)
   } else {
     mu_y = predict(y_model, newdata = data_y, type = "response")
@@ -106,7 +112,7 @@ data_m[, (X) := xm]
   n = as.integer(nrow(data)) # sample's row
 
   # Constructing data_y (X in potential value Y)
-  data_y = data[rep(1:n, 2)]  # Copying every row twice (representing for M=1 and M=0)
+  data_y = data[rep(1:n, 2), !c(Y), with = FALSE]  # Copying every row twice (representing for M=1 and M=0)
   data_y[, (X) := rep(xx, times = 2*n)]
 
   # Modifying M in data_y
@@ -117,8 +123,8 @@ data_m[, (X) := xm]
 
   # Estimation Y
   if (y_type == "ordinal") {
-    y_levels = as.numeric(levels(factor(data[[Y]])))
-    mu_y = predict(y_model, newdata = data_y, type = "probs")
+    y_levels = seq_along(levels(factor(data[[Y]])))
+    mu_y <- predict_probs(y_model, data_y)
     ey_values = as.vector(mu_y %*% y_levels)
   } else {
     ey_values = predict(y_model, newdata = data_y, type = "response")
@@ -142,10 +148,10 @@ data_m[, (X) := xm]
 
   n = as.integer(nrow(data)) # sample's row
 
-  p_m = predict(m_model, newdata = data_m, type = "probs") # Prediction of M
+  p_m <- predict_probs(m_model, data_m) # Prediction of M
 
   # Constructing data_y (X in potential value Y)
-  data_y = data[rep(1:n, each = num_m_levels)]
+  data_y = data[rep(1:n, each = num_m_levels), !c(Y), with = FALSE]
   expanded_X = rep(xx, each = num_m_levels*n)
   data_y[, (X) := expanded_X]
 
@@ -158,8 +164,8 @@ data_m[, (X) := xm]
 
   # Estimation Y
   if (y_type == "ordinal") {
-    y_levels = as.numeric(levels(factor(data[[Y]])))
-    mu_y = predict(y_model, newdata = data_y, type = "probs")
+    y_levels = seq_along(levels(factor(data[[Y]])))
+    mu_y <- predict_probs(y_model, data_y)
     ey_values = as.vector(mu_y %*% y_levels)
   } else {
     ey_values = predict(y_model, newdata = data_y, type = "response")
